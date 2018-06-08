@@ -19,9 +19,9 @@ def thresholdCellId2vtp(obj,ind):
     # The numbers are: 1- idx, 2-port, 3-connection, 4-fieldAssociation, 5-name
     thresh.SetInputArrayToProcess(0, 0, 0, 1, "id")
     thresh.Update()
-    vtpObj = extraction.vtu2vtp(thresh.GetOutput())
+    vtpObj = vtu2vtp(thresh.GetOutput())
 
-    return polydata.normFilter(polydata.triangulatePolyData(vtpObj))
+    return normFilter(triangulatePolyData(vtpObj))
 
 
 def getCell2vtp(obj,ind):
@@ -53,4 +53,4 @@ def getCell2vtp(obj,ind):
         vtpObj.SetPoints(obj.GetPoints())
         vtpObj.SetPolys(polygons)
 
-    return polydata.normFilter(polydata.triangulatePolyData(vtpObj))
+    return normFilter(triangulatePolyData(vtpObj))
