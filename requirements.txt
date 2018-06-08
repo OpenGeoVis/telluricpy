@@ -1,0 +1,7 @@
+SimPEG
+vtk
+modelChecks
+modelTools
+scipy
+numpy
+pysal
