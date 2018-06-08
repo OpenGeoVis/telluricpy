@@ -2,8 +2,10 @@
 import vtk
 import numpy as np
 import vtk.util.numpy_support as npsup
-import sys
 import modelChecks as mCh
+import modelTools as mT
+import pysal
+
 from telluricpy import vtkTools
 
 
@@ -99,9 +101,6 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
 
 
     """
-
-    import vtk, pysal, numpy as np, vtk.util.numpy_support as npsup
-
     # Read the input shp file
     shp = pysal.open(shpFile,'r')
     # Read the connected dbf file
@@ -179,8 +178,6 @@ def shape2vtpFile(shpFile,dbfHeader):
     NOTE: likely won't work, since cells in a vtp object can't have holes in them.
     '''
 
-    import vtk, pysal, numpy as np, vtk.util.numpy_support as npsup
-
     # Read the input shp file
     shp = pysal.open(shpFile,'r')
     # Read the connected dbf file
@@ -246,7 +243,6 @@ def shape2vtpFile(shpFile,dbfHeader):
 
 if __name__ == "__main__":
     # Main program
-    import modelTools as mT
 
     shpFile = '/home/Gudni/Dropbox/Work/ISOR/Hengill/GeologyData/Jardfraedikort_tAtafla.shp'
     dbfHead = ['AREA','KENNI','atafla_LET','atafla_SKY','atafla_TYP']
