@@ -1,10 +1,4 @@
-import numpy as np
-import modelTools as mT
-import SimPEG as simpeg
 import vtk
-import sys
-import os
-import time
 import vtk.util.numpy_support as npsup
 
 

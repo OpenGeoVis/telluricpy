@@ -1,10 +1,6 @@
 import numpy as np
-import modelTools as mT
-import SimPEG as simpeg
+#import modelTools as mT
 import vtk
-import sys
-import os
-import time
 import vtk.util.numpy_support as npsup
 
 
@@ -147,6 +143,7 @@ def join2Polydata(vtkPolydata1,vtkPolydata2,threshold1='lower',threshold2='upper
 	""" Function finds the intersect of two polydata and returns the append of the 2.
 
 	"""
+	import modelTools as mT
 
 	# NOTE: Test this to deal with inaccuracies.
 	# Copy the structure from the inputs.
