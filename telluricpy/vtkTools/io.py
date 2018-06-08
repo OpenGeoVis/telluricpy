@@ -1,4 +1,10 @@
-import numpy as np, modelTools as mT, SimPEG as simpeg, vtk, sys, os, time
+import numpy as np
+import modelTools as mT
+import SimPEG as simpeg
+import vtk
+import sys
+import os
+import time
 import vtk.util.numpy_support as npsup
 
 
@@ -13,6 +19,7 @@ def writeVTPFile(fileName,vtkPolyObject):
     polyWriter.SetFileName(fileName)
     polyWriter.Update()
 
+
 def writeVTUFile(fileName,vtkUnstructuredGrid,compress=True):
     '''Function to write vtk unstructured grid (vtu).'''
     Writer = vtk.vtkXMLUnstructuredGridWriter()
@@ -26,6 +33,7 @@ def writeVTUFile(fileName,vtkUnstructuredGrid,compress=True):
     Writer.SetFileName(fileName)
     Writer.Update()
 
+
 def writeVTRFile(fileName,vtkRectilinearGrid):
     '''Function to write vtk rectilinear grid (vtr).'''
     Writer = vtk.vtkXMLRectilinearGridWriter()
@@ -35,6 +43,7 @@ def writeVTRFile(fileName,vtkRectilinearGrid):
         Writer.SetInput(vtkRectilinearGrid)
     Writer.SetFileName(fileName)
     Writer.Update()
+
 
 def writeVTSFile(fileName,vtkStructuredGrid):
     '''Function to write vtk structured grid (vts).'''
@@ -46,12 +55,14 @@ def writeVTSFile(fileName,vtkStructuredGrid):
     Writer.SetFileName(fileName)
     Writer.Update()
 
+
 def readVTSFile(fileName):
     '''Function to read vtk structured grid (vts) and return a grid object.'''
     Reader = vtk.vtkXMLStructuredGridReader()
     Reader.SetFileName(fileName)
     Reader.Update()
     return Reader.GetOutput()
+
 
 def readVTUFile(fileName):
     '''Function to read vtk structured grid (vtu) and return a grid object.'''
@@ -60,12 +71,14 @@ def readVTUFile(fileName):
     Reader.Update()
     return Reader.GetOutput()
 
+
 def readVTRFile(fileName):
     '''Function to read vtk structured grid (vtr) and return a grid object.'''
     Reader = vtk.vtkXMLRectilinearGridReader()
     Reader.SetFileName(fileName)
     Reader.Update()
     return Reader.GetOutput()
+
 
 def readVTPFile(fileName):
     '''Function to read vtk structured grid (vtp) and return a grid object.'''

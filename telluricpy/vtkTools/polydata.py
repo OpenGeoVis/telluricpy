@@ -1,4 +1,10 @@
-import numpy as np, modelTools as mT, SimPEG as simpeg, vtk, sys, os, time
+import numpy as np
+import modelTools as mT
+import SimPEG as simpeg
+import vtk
+import sys
+import os
+import time
 import vtk.util.numpy_support as npsup
 
 
@@ -25,6 +31,7 @@ def normFilter(vtkPoly):
 	# reverseFilter.Update()
 	return polyNormFilter.GetOutput()
 
+
 def extrudePolygon(polyObject,extrudeFactor,vector=None,centered=False):
 	"""
 	Extrude polygons by a scalar factor.
@@ -50,6 +57,7 @@ def extrudePolygon(polyObject,extrudeFactor,vector=None,centered=False):
 
 	return ext
 
+
 def calculateVolume(polyData):
     """
     Calculates the volume of a polydata cell.
@@ -67,6 +75,7 @@ def calculateVolume(polyData):
     mp.SetInputData(polyData)
     return float(mp.GetVolume())
 
+
 def decimatePolygon(polyObject,reduceFactor=0.5):
 	'''
 	'''
@@ -79,6 +88,7 @@ def decimatePolygon(polyObject,reduceFactor=0.5):
 	deci.Update()
 	return deci.GetOutput()
 
+
 def smoothPolyData(polyObject):
 	smoother = vtk.vtkSmoothPolyDataFilter()
 	smoother.SetInputData(polyObject)
@@ -90,11 +100,13 @@ def smoothPolyData(polyObject):
 	smoother.Update()
 	return smoother.GetOutput()
 
+
 def triangulatePolyData(polyData):
 	triFilter = vtk.vtkTriangleFilter() # triFilter to clean the polydata
 	triFilter.SetInputData(polyData)
 	triFilter.Update()
 	return triFilter.GetOutput()
+
 
 def convertToImplicitPolyDataDistance(polyData):
 	triFilter = vtk.vtkTriangleFilter() # triFilter to clean the polydata
@@ -104,6 +116,7 @@ def convertToImplicitPolyDataDistance(polyData):
 	ImpDist.SetTolerance(1e-1)
 	ImpDist.SetInput(triFilter.GetOutput())
 	return ImpDist
+
 
 def sinWinSmoother(polyData):
 	smoother = vtk.vtkWindowedSincPolyDataFilter()
@@ -118,6 +131,7 @@ def sinWinSmoother(polyData):
 	smoother.Update()
 	return smoother.GetOutput()
 
+
 def transformToLocalCoords(locPts,vtkPolyObj):
     """ Function that transforms points to a local system, given by the input"""
     newPts = vtk.vtkPoints()
@@ -127,6 +141,7 @@ def transformToLocalCoords(locPts,vtkPolyObj):
     newvtkPolyObj.DeepCopy(vtkPolyObj)
     newvtkPolyObj.SetPoints(newPts)
     return newvtkPolyObj
+
 
 def join2Polydata(vtkPolydata1,vtkPolydata2,threshold1='lower',threshold2='upper',outThres=False,saveIntersect=False):
 	""" Function finds the intersect of two polydata and returns the append of the 2.
@@ -230,6 +245,7 @@ def cleanPolyData(polyData):
 	cleanFilt.SetInputData(polyData)
 	cleanFilt.Update()
 	return cleanFilt.GetOutput()
+
 
 def polyDataList2polyhedVTU(polyDataList):
 	"""

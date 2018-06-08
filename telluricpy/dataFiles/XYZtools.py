@@ -1,4 +1,7 @@
-import numpy as np, vtk, vtk.util.numpy_support as npsup
+import numpy as np
+import vtk
+import vtk.util.numpy_support as npsup
+
 
 # Functions that make vtk object out of XYZ locations.
 def makeCylinderPtsVTP(locXYZ,radius=50,height=50,res=10):

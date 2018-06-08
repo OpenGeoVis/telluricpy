@@ -1,7 +1,11 @@
 # Script to convert GIS .shp and .dbt files to VTK vtp files.
-import vtk, numpy as np, vtk.util.numpy_support as npsup, sys
+import vtk
+import numpy as np
+import vtk.util.numpy_support as npsup
+import sys
 import modelChecks as mCh
 from telluricpy import vtkTools
+
 
 def makePolyhedron(polygon,thickness=1,elevation=0,triangulate=False,returnGrid=False):
     """
@@ -20,6 +24,7 @@ def makePolyhedron(polygon,thickness=1,elevation=0,triangulate=False,returnGrid=
         return mCh.makePolyhedronCell(volpolyPolyData,True)
     else:
         return mCh.makePolyhedronCell(volpolyPolyData)
+
 
 def makePolygon(polygon,elevation=0,triangulate=False):
     """
@@ -57,6 +62,7 @@ def makePolygon(polygon,elevation=0,triangulate=False):
         return triFilt.GetOutput()
     else:
         return polyPolyData
+
 
 def makeVolumePolygon(polygon,thickness=1,elevation=0.0,triangulate=False,cap=True):
     """

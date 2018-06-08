@@ -1,7 +1,15 @@
-import numpy as np, modelTools as mT, SimPEG as simpeg, vtk, sys, os, time
+import numpy as np
+import modelTools as mT
+import SimPEG as simpeg
+import vtk
+import sys
+import os
+import time
 import vtk.util.numpy_support as npsup
 
-import polydata, extraction
+# Local imports
+from .polydata import *
+from .extraction import *
 
 
 # Function in vtk to work with dataset

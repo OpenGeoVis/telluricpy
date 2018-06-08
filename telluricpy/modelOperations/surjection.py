@@ -1,6 +1,5 @@
-
-
 # Collection of functions that surject models (nd-arrays).
+
 
 def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     """
@@ -9,7 +8,9 @@ def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     Based on a volumemetric estimation of intersecting cells.
 
     """
-    import numpy as np, SimPEG as simpeg, vtk
+    import numpy as np
+    import SimPEG as simpeg
+    import vtk
     import vtk.util.numpy_support as npsup
 
     from telluricpy import vtkTools
@@ -41,6 +42,7 @@ def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     # Make the
     outMat = simpeg.sp.csr_matrix((val,(i,j)),shape=(vtkDataSet2.GetNumberOfCells(),vtkDataSet1.GetNumberOfCells()),dtype=float)
     return outMat
+
 
 def _calculateVolumeByBoxClip(vtkDataSet1,vtkDataSet2,iV):
     """
@@ -87,6 +89,7 @@ def _calculateVolumeByBoxClip(vtkDataSet1,vtkDataSet2,iV):
 
     return uniIDs, volCal/np.sum(volCal)
 
+
 def _extractRectGridByBounds(vtrObj,boundObj):
     '''
     Function that extracts cell from a rectilinear grid (vtr) using bounds.
@@ -112,6 +115,7 @@ def _extractRectGridByBounds(vtrObj,boundObj):
     extRect.SetVOI((iL,iU,jL,jU,kL,kU))
     extRect.Update()
     return extRect
+
 
 def _calculateVolumeByBoolean(vtkDataSet1,vtkDataSet2,iV):
     """
@@ -161,6 +165,7 @@ def _calculateVolumeByBoolean(vtkDataSet1,vtkDataSet2,iV):
             if volVal > 0.0:
                 volL.append(volVal)
     return extInd,np.array(volL)
+
 
 def getIWDSurjectMatrix(vtkDataSet1, vtkDataSet2, leafsize = 10, nrofNear = 9, eps=0, p=1.):
     """
