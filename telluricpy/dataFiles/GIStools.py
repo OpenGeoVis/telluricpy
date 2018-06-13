@@ -2,8 +2,6 @@
 import vtk
 import numpy as np
 import vtk.util.numpy_support as npsup
-import modelChecks as mCh
-import modelTools as mT
 import pysal
 
 from telluricpy import vtkTools
@@ -23,9 +21,9 @@ def makePolyhedron(polygon,thickness=1,elevation=0,triangulate=False,returnGrid=
 
     # Make the polyhedron
     if returnGrid:
-        return mCh.makePolyhedronCell(volpolyPolyData,True)
+        return vtkTools.makePolyhedronCell(volpolyPolyData,True)
     else:
-        return mCh.makePolyhedronCell(volpolyPolyData)
+        return vtkTools.makePolyhedronCell(volpolyPolyData)
 
 
 def makePolygon(polygon,elevation=0,triangulate=False):
@@ -125,7 +123,7 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
         mainPolygon = vtkTools.polydata.normFilter(makeVolumePolygon(np.array(poly.parts[0][:-1]),thickness,elevation,triangulate=True))
         # Deal with holes
         if poly.holes[0] == []:
-            mainPHGrid = mCh.makePolyhedronCell(mainPolygon,returnGrid=True)
+            mainPHGrid = vtkTools.makePolyhedronCell(mainPolygon,returnGrid=True)
         else:
             holesAppendFilt = vtk.vtkAppendPolyData()
             for hole in poly.holes:
@@ -137,7 +135,7 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
             # Cut the holes
             mainCutHolesPolygon = vtkTools.polydata.join2Polydata(mainPolygon,holesPolygons,threshold1='upper',threshold2='lower')
             # Add the cut polyhedron
-            mainPHGrid = mCh.makePolyhedronCell(mainCutHolesPolygon,returnGrid=True)
+            mainPHGrid = vtkTools.makePolyhedronCell(mainCutHolesPolygon,returnGrid=True)
         shpPHAppFilt.AddInputData(mainPHGrid)
     shpPHAppFilt.Update()
     # Extract the vtu object.
@@ -249,4 +247,4 @@ if __name__ == "__main__":
 
 
     vtpObj = shape2vtpFile(shpFile,dbfHead)
-    mT.writeVTPFile('Hengill_geologicMap.vtp',vtpObj)
+    vtkTools.writeVTPFile('Hengill_geologicMap.vtp',vtpObj)
