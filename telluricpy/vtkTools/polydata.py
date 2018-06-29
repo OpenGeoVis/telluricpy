@@ -141,9 +141,8 @@ def transformToLocalCoords(locPts,vtkPolyObj):
 
 def join2Polydata(vtkPolydata1,vtkPolydata2,threshold1='lower',threshold2='upper',outThres=False,saveIntersect=False):
     """ Function finds the intersect of two polydata and returns the append of the 2.
-
-	"""
-	import modelTools as mT
+    """
+    import modelTools as mT
 
     # NOTE: Test this to deal with inaccuracies.
     # Copy the structure from the inputs.
@@ -294,6 +293,5 @@ def polyDataList2polyhedVTU(polyDataList):
     vtkPts = vtk.vtkPoints()
     vtkPts.SetData(npsup.numpy_to_vtk(npPts,deep=1))
     unstructGrid.SetPoints(vtkPts)
-
-	# Return
-	return unstructGrid
+    # Return
+    return unstructGrid
