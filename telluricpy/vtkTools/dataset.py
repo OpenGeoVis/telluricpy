@@ -1,7 +1,10 @@
-import numpy as np, SimPEG as simpeg, vtk, sys, os, time
+import numpy as np
+import vtk
 import vtk.util.numpy_support as npsup
 
-import polydata, extraction
+# Local imports
+from .polydata import *
+from .extraction import *
 
 # Functions that take any vtkData object as input.
 
@@ -12,11 +15,15 @@ def thresholdCellId2vtp(vtkObj,ind):
         Function to return polygon from a cell in a data object.
         vtkObj has to have a 'id' cell array
     """
+    thresh = vtk.vtkThreshold()
+    thresh.SetInputData(obj)
+    thresh.ThresholdBetween(ind-.1,ind+.1)
+    # The numbers are: 1- idx, 2-port, 3-connection, 4-fieldAssociation, 5-name
+    thresh.SetInputArrayToProcess(0, 0, 0, 1, "id")
+    thresh.Update()
+    vtpObj = vtu2vtp(thresh.GetOutput())
 
-    thresObj = thresFilt(vtkObj,'ind',[ind-.1,ind+.1],thType='Between')
-    vtpObj = extraction.vtu2vtp(thresObj)
-
-    return polydata.normFilter(polydata.triangulatePolyData(vtpObj))
+    return normFilter(triangulatePolyData(vtpObj))
 
 
 def getCell2vtp(vtkObj,ind):
@@ -48,7 +55,7 @@ def getCell2vtp(vtkObj,ind):
         vtpObj.SetPoints(obj.GetPoints())
         vtpObj.SetPolys(polygons)
 
-    return polydata.normFilter(polydata.triangulatePolyData(vtpObj))
+    return normFilter(triangulatePolyData(vtpObj))
 
 # Add a numpy array to a VTKobject
 def addNPDataArrays(vtkObj,arrDict,arrType='Cell'):

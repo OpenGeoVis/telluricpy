@@ -1,1 +1,2 @@
-import GIStools, XYZtools
+from .GIStools import *
+from .XYZtools import *

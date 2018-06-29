@@ -1,6 +1,11 @@
 # Script to convert GIS .shp and .dbt files to VTK vtp files.
-import vtk, numpy as np, vtk.util.numpy_support as npsup, sys
+import vtk
+import numpy as np
+import vtk.util.numpy_support as npsup
+import pysal
+
 from telluricpy import vtkTools
+
 
 def makePolyhedron(polygon,thickness=1,elevation=0,triangulate=False,returnGrid=False):
     """
@@ -85,6 +90,7 @@ def makePolygon(polygon,elevation=0,triangulate=False):
     else:
         return polyPolyData
 
+
 def makeVolumePolygon(polygon,thickness=1,elevation=0.0,triangulate=False,cap=True):
     """
     Function to make a 3D/volume polygon from a 2D/planepolygon.
@@ -120,9 +126,6 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
 
 
     """
-
-    import vtk, pysal, numpy as np, vtk.util.numpy_support as npsup
-
     # Read the input shp file
     shp = pysal.open(shpFile,'r')
     # Read the connected dbf file
@@ -147,7 +150,7 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
         mainPolygon = vtkTools.polydata.normFilter(makeVolumePolygon(np.array(poly.parts[0][:-1]),thickness,elevation,triangulate=True))
         # Deal with holes
         if poly.holes[0] == []:
-            mainPHGrid = _makePolyhedronCell(mainPolygon,returnGrid=True)
+            mainPHGrid = vtkTools.makePolyhedronCell(mainPolygon,returnGrid=True)
         else:
             holesAppendFilt = vtk.vtkAppendPolyData()
             for hole in poly.holes:
@@ -159,7 +162,7 @@ def shape2polyhedron(shpFile,dbfHeader=None,thickness=1.0,elevation=0.0):
             # Cut the holes
             mainCutHolesPolygon = vtkTools.polydata.join2Polydata(mainPolygon,holesPolygons,threshold1='upper',threshold2='lower')
             # Add the cut polyhedron
-            mainPHGrid = _makePolyhedronCell(mainCutHolesPolygon,returnGrid=True)
+            mainPHGrid = vtkTools.makePolyhedronCell(mainCutHolesPolygon,returnGrid=True)
         shpPHAppFilt.AddInputData(mainPHGrid)
     shpPHAppFilt.Update()
     # Extract the vtu object.
@@ -199,8 +202,6 @@ def shape2vtpFile(shpFile,dbfHeader):
 
     NOTE: likely won't work, since cells in a vtp object can't have holes in them.
     '''
-
-    import vtk, pysal, numpy as np, vtk.util.numpy_support as npsup
 
     # Read the input shp file
     shp = pysal.open(shpFile,'r')
@@ -273,4 +274,4 @@ if __name__ == "__main__":
 
 
     vtpObj = shape2vtpFile(shpFile,dbfHead)
-    vtkTools.io.writeVTPFile('Hengill_geologicMap.vtp',vtpObj)
+    vtkTools.writeVTPFile('Hengill_geologicMap.vtp',vtpObj)

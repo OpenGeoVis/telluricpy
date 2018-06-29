@@ -1,6 +1,13 @@
+import numpy as np
+import SimPEG as simpeg
+import vtk
+import vtk.util.numpy_support as npsup
+from scipy.spatial import cKDTree as KDTree
 
+from telluricpy import vtkTools
 
 # Collection of functions that surject models (nd-arrays).
+
 
 def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     """
@@ -9,12 +16,6 @@ def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     Based on a volumemetric estimation of intersecting cells.
 
     """
-    import numpy as np, SimPEG as simpeg, vtk
-    import vtk.util.numpy_support as npsup
-
-    from telluricpy import vtkTools
-    sp = simpeg.sp
-
     # Check the type of DataSet2
     if np.all(np.array([vtkDataSet2.GetCellType(i) for i in range(vtkDataSet2.GetNumberOfCells())]) == 11):
         useBox = True
@@ -42,6 +43,7 @@ def getVolumemetricSurjectMatrix(vtkDataSet1,vtkDataSet2):
     outMat = simpeg.sp.csr_matrix((val,(i,j)),shape=(vtkDataSet2.GetNumberOfCells(),vtkDataSet1.GetNumberOfCells()),dtype=float)
     return outMat
 
+
 def _calculateVolumeByBoxClip(vtkDataSet1,vtkDataSet2,iV):
     """
     Function to calculate the volumes of a cell intersecting a mesh.
@@ -51,10 +53,6 @@ def _calculateVolumeByBoxClip(vtkDataSet1,vtkDataSet2,iV):
     and unstructured grids with all cells as voxels
 
     """
-    import numpy as np, SimPEG as simpeg, vtk
-    import vtk.util.numpy_support as npsup
-
-    from telluricpy import vtkTools
 
     # Triangulate polygon and calc normals
     baseC = vtkTools.dataset.getCell2vtp(vtkDataSet2,iV)
@@ -87,6 +85,7 @@ def _calculateVolumeByBoxClip(vtkDataSet1,vtkDataSet2,iV):
 
     return uniIDs, volCal/np.sum(volCal)
 
+
 def _extractRectGridByBounds(vtrObj,boundObj):
     '''
     Function that extracts cell from a rectilinear grid (vtr) using bounds.
@@ -94,8 +93,6 @@ def _extractRectGridByBounds(vtrObj,boundObj):
     Should be signifacantly faster the extractBounds method.
 
     '''
-    import numpy as np, SimPEG as simpeg, vtk
-    import vtk.util.numpy_support as npsup
 
     bO = boundObj.GetBounds()
     xC = npsup.vtk_to_numpy(vtrObj.GetXCoordinates())
@@ -119,6 +116,7 @@ def _extractRectGridByBounds(vtrObj,boundObj):
     extRect.Update()
     return extRect
 
+
 def _calculateVolumeByBoolean(vtkDataSet1,vtkDataSet2,iV):
     """
     Function to calculate the volumes of a cell intersecting a mesh.
@@ -127,11 +125,6 @@ def _calculateVolumeByBoolean(vtkDataSet1,vtkDataSet2,iV):
     a general implementation but slow.
 
     """
-    import numpy as np, SimPEG as simpeg, vtk
-    import vtk.util.numpy_support as npsup
-
-    from telluricpy import vtkTools
-
     # Triangulate polygon and calc normals
     baseC = vtkTools.dataset.getCell2vtp(vtkDataSet2,iV)
     baseVol = vtkTools.polydata.calculateVolume(baseC)
@@ -168,6 +161,7 @@ def _calculateVolumeByBoolean(vtkDataSet1,vtkDataSet2,iV):
                 volL.append(volVal)
     return extInd,np.array(volL)
 
+
 def getIWDSurjectMatrix(vtkDataSet1, vtkDataSet2, leafsize = 10, nrofNear = 9, eps=0, p=1.):
     """
     Function to calculate and return a sparse matrix of surjection form vtkDataSet1 to vtkDataSet2
@@ -179,16 +173,6 @@ def getIWDSurjectMatrix(vtkDataSet1, vtkDataSet2, leafsize = 10, nrofNear = 9, e
     Output:
         scipy sparce matrix - Weight inverse distance values
     """
-
-
-    # Import packages
-    import numpy as np, SimPEG as simpeg, vtk
-    import vtk.util.numpy_support as npsup
-
-    from scipy.spatial import cKDTree as KDTree
-
-
-
     # Prep the matrices
     # Get cell centers
     ds1CC = vtk.vtkCellCenters()

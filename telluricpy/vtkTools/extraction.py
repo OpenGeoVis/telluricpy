@@ -1,7 +1,7 @@
-import numpy as np, SimPEG as simpeg, vtk
-import vtk.util.numpy_support as npsup
-# sys.path.append('/home/gudni/Dropbox/code/python/vtkTools/')
-from polydata import convertToImplicitPolyDataDistance
+import numpy as np
+import vtk
+from .polydata import convertToImplicitPolyDataDistance
+
 
 # Clip and extrude the topo
 def clipDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,insideOut=True,extractBounds=False):
@@ -34,6 +34,7 @@ def clipDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,insideOut=True
     else:
         return clipFilt.GetOutput()
 
+
 # Cut and extrude the topo
 def cutDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,extractBounds=False):
     """
@@ -59,6 +60,7 @@ def cutDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,extractBounds=F
         return cutFilt.GetOutput(), impDist
     else:
         return cutFilt.GetOutput()
+
 
 # Extract cells with a polygon, needs to have normals to work
 def extractDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,extInside=True,extBoundaryCells=True,extractBounds=False):
@@ -90,6 +92,7 @@ def extractDataSetWithPolygon(vtkDataSet,vtkPoly,returnImpDist=False,extInside=T
         return extractFilt.GetOutput(), impDist
     else:
         return extractFilt.GetOutput()
+
 
 def extractDataSetByBounds(fullvtkDataSet,boundvtkDataSet):
     """
@@ -126,6 +129,7 @@ def sumImplicitFunc(impFunctions):
 
     return impBool
 
+
 def makePolyhedronCell(vtkPolyData,returnGrid=False):
     """ Function that makes polyhedron cell from polygon. """
 
@@ -154,17 +158,20 @@ def makePolyhedronCell(vtkPolyData,returnGrid=False):
     else:
         return vtkPolyhed
 
+
 def geometryFilt(vtkObject):
     geoFilt = vtk.vtkGeometryFilter()
     geoFilt.SetInputData(vtkObject)
     geoFilt.Update()
     return geoFilt.GetOutput()
 
+
 def vtu2vtp(vtuObject):
     vtu2vtpFilt = vtk.vtkDataSetSurfaceFilter()
     vtu2vtpFilt.SetInputData(vtuObject)
     vtu2vtpFilt.Update()
     return vtu2vtpFilt.GetOutput()
+
 
 def vtp2vtuPolyhedron(vtpObject):
     """
